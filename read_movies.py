@@ -52,6 +52,22 @@ def main():
     print("===== Reading from DynamoDB =====\n")
     print_all_movies()
 
+def get_movie_by_title():
+    """Prompt the user for a title and search the Movies table for it."""
+    table = get_table()
+    title_input = input("Enter the movie title to search: ")
+
+    response = table.scan()
+    items = response.get("Items", [])
+
+    found = False
+    for movie in items:
+        if movie.get("Title") == title_input:
+            print_movie(movie)
+            found = True
+
+    if not found:
+        print(f"Movie titled '{title_input}' not found.")
 
 if __name__ == "__main__":
     main()
